@@ -1,0 +1,78 @@
+name: sea-support
+region: nyc
+
+services:
+- name: web
+  source_dir: /
+  github:
+    repo: ajot/sea-support
+    branch: main
+    deploy_on_push: true
+
+  run_command: bin/rails server -p 8080
+  environment_slug: ruby-on-rails
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  http_port: 8080
+
+  envs:
+  - key: RAILS_ENV
+    value: production
+  - key: MONGODB_URI
+    scope: RUN_TIME
+    type: SECRET
+  - key: DO_AGENT_ENDPOINT
+    scope: RUN_TIME
+    type: SECRET
+  - key: DO_AGENT_ACCESS_KEY
+    scope: RUN_TIME
+    type: SECRET
+  - key: RAILS_MASTER_KEY
+    scope: RUN_TIME
+    type: SECRET
+  - key: SECRET_KEY_BASE
+    scope: RUN_TIME
+    type: SECRET
+  - key: REDIS_URL
+    scope: RUN_TIME
+    type: SECRET
+
+- name: worker
+  source_dir: /
+  github:
+    repo: ajot/sea-support
+    branch: main
+    deploy_on_push: true
+
+  run_command: bundle exec sidekiq
+  environment_slug: ruby-on-rails
+  instance_count: 1
+  instance_size_slug: basic-xxs
+
+  envs:
+  - key: RAILS_ENV
+    value: production
+  - key: MONGODB_URI
+    scope: RUN_TIME
+    type: SECRET
+  - key: DO_AGENT_ENDPOINT
+    scope: RUN_TIME
+    type: SECRET
+  - key: DO_AGENT_ACCESS_KEY
+    scope: RUN_TIME
+    type: SECRET
+  - key: RAILS_MASTER_KEY
+    scope: RUN_TIME
+    type: SECRET
+  - key: SECRET_KEY_BASE
+    scope: RUN_TIME
+    type: SECRET
+  - key: REDIS_URL
+    scope: RUN_TIME
+    type: SECRET
+
+databases:
+- name: redis
+  engine: REDIS
+  production: false
+  size: db-s-dev-database
