@@ -144,9 +144,15 @@ This starts the Rails server and watches for CSS changes. Your app will be at `h
 
 For more control, run components separately:
 ```bash
+# Build Tailwind CSS first (required if not using bin/dev)
+bin/rails tailwindcss:build
+
+# Then start the servers
 bin/rails server          # Main app on port 3000
 bundle exec sidekiq       # Background job processor
 ```
+
+**Note:** If you use `bin/rails server` directly instead of `bin/dev`, you must build Tailwind CSS first with `bin/rails tailwindcss:build`. The `bin/dev` command handles this automatically.
 
 ---
 
